@@ -1,0 +1,199 @@
+.ficha {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.ficha-hd {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  color: #fff;
+  border-radius: 14px 14px 0 0;
+  padding: 1.25rem 1.35rem;
+}
+
+.eyebrow {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ficha-hd h1 {
+  margin: 0.2rem 0;
+  font-size: 1.45rem;
+}
+
+.owner {
+  margin: 0;
+  opacity: 0.92;
+  font-size: 0.95rem;
+}
+
+.modo-consulta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.55rem 0 0;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  opacity: 0.95;
+  max-width: 36rem;
+}
+
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.valores {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  background: #faf8fc;
+  border: 1px solid #e8e2f0;
+  border-top: 0;
+}
+
+.valores div {
+  padding: 0.9rem 1.1rem;
+  border-right: 1px solid #e8e2f0;
+}
+
+.valores div:last-child {
+  border-right: 0;
+}
+
+.valores span {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+.valores strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.15rem;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e8e2f0;
+  border-top: 0;
+  padding: 0 0.5rem;
+}
+
+.tabs button {
+  border: 0;
+  background: transparent;
+  padding: 0.85rem 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tabs button.active {
+  color: #7c3aed;
+  border-bottom-color: #7c3aed;
+}
+
+.ficha-body {
+  border-radius: 0 0 14px 14px;
+  border-top: 0;
+  padding: 1.15rem;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.chip {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid #e8e2f0;
+  background: #fff;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.chip.on {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #6d28d9;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.15rem;
+}
+
+.ok-msg {
+  color: #047857;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.empty,
+.hint-line {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .valores {
+    grid-template-columns: 1fr;
+  }
+
+  .valores div {
+    border-right: 0;
+    border-bottom: 1px solid #e8e2f0;
+  }
+
+  .ficha-hd {
+    flex-direction: column;
+  }
+}

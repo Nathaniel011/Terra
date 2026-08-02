@@ -1,0 +1,57 @@
+<div class="card map-card">
+  <div class="card-hd">
+    <div>
+      <h2>Consulta geográfica</h2>
+      <p class="hd-sub">Ubicación de unidades catastrales en el radio urbano</p>
+    </div>
+    <span class="muted">SIG municipal (mock esquemático)</span>
+  </div>
+  <div class="card-bd map-bd">
+    <div class="city-map" aria-label="Mapa catastral">
+      <div class="street horizontal s1">AV. MELCHOR URQUIDI</div>
+      <div class="street horizontal s2">C. COLOMBIA</div>
+      <div class="street horizontal s3">C. RONCAL</div>
+      <div class="street horizontal s4">C. JUNÍN</div>
+      <div class="street horizontal s5">C. SUCRE</div>
+      <div class="street vertical v1">AV. HER.</div>
+      <span class="zone-pill z8">ZONA 008</span>
+      <span class="zone-pill z9">ZONA 009</span>
+      @for (p of predios.all(); track p.codigoCatastral) {
+        <a
+          class="lot"
+          [class]="p.uso"
+          [class.selected]="p.codigoCatastral === selected()"
+          [style.left.%]="p.mapX"
+          [style.top.%]="p.mapY"
+          href="#"
+          [attr.title]="p.codigoCatastral + ' — ' + p.propietario"
+          (click)="selectLot(p.codigoCatastral, $event)"
+        >
+          @if (p.codigoCatastral === selected()) {
+            <span class="pin"></span>
+          }
+        </a>
+      }
+      <div class="legend">
+        <strong>LEYENDA</strong>
+        <div><span class="swatch residencial"></span> Residencial</div>
+        <div><span class="swatch comercial"></span> Comercial</div>
+        <div><span class="swatch verde"></span> Área Verde</div>
+        <div><span class="swatch selected-sw"></span> Predio selec.</div>
+      </div>
+      <div class="compass" aria-hidden="true">N</div>
+    </div>
+    @if (selectedPredio(); as s) {
+      <div class="map-selection">
+        <div>
+          <span class="sel-label">Selección</span>
+          <strong class="mono">{{ s.codigoCatastral }}</strong>
+          <span class="sel-owner">{{ s.propietario }}</span>
+        </div>
+        <a class="btn btn-primary" [routerLink]="['/app/unidades', s.codigoCatastral]">
+          Ver ficha
+        </a>
+      </div>
+    }
+  </div>
+</div>

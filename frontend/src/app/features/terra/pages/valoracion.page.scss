@@ -1,0 +1,155 @@
+.val-hd {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.anio-field {
+  min-width: 8rem;
+}
+
+.modo-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e8e2f0;
+  border-radius: 10px;
+  padding: 0.35rem;
+}
+
+.modo-tabs button {
+  border: 0;
+  background: transparent;
+  padding: 0.65rem 0.9rem;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.modo-tabs button.active {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.hd-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.resumen-vi {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.35rem;
+}
+
+.resumen-vi .kpi {
+  background: #faf8fc;
+  border: 1px solid #e8e2f0;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.resumen-vi .kpi.total {
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  border: 0;
+  color: #fff;
+}
+
+.resumen-vi .kpi.total span,
+.resumen-vi .kpi.total code {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.resumen-vi span {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7c3aed;
+}
+
+.resumen-vi strong {
+  display: block;
+  margin: 0.35rem 0;
+  font-size: 1.35rem;
+  color: #0f172a;
+}
+
+.resumen-vi .kpi.total strong {
+  color: #fff;
+}
+
+.resumen-vi code {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.block-title {
+  margin: 1.25rem 0 0.65rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.factores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.75rem 0;
+}
+
+.chip {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid #e8e2f0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.chip.on {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.formula-line {
+  font-size: 0.85rem;
+  color: #475569;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 1px dashed #e2e8f0;
+}
+
+.empty {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.hint-link {
+  margin-top: 1rem;
+}
+
+.detail-row td {
+  background: #faf8fc !important;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .resumen-vi {
+    grid-template-columns: 1fr;
+  }
+}

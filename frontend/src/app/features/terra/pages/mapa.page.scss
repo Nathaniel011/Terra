@@ -1,0 +1,243 @@
+.map-card .muted {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.hd-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.map-bd {
+  padding: 0.75rem !important;
+}
+
+.city-map {
+  position: relative;
+  height: min(70vh, 36rem);
+  min-height: 22rem;
+  border-radius: 10px;
+  background:
+    linear-gradient(#eef1f5 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, #eef1f5 1px, transparent 1px) 0 0 / 40px 40px,
+    #f8fafc;
+  overflow: hidden;
+  border: 1px solid #e8e2f0;
+}
+
+.street {
+  position: absolute;
+  color: #94a3b8;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.street.horizontal {
+  left: 8%;
+  right: 8%;
+  height: 1.4rem;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  background: rgba(203, 213, 225, 0.45);
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.s1 {
+  top: 8%;
+}
+.s2 {
+  top: 26%;
+}
+.s3 {
+  top: 44%;
+}
+.s4 {
+  top: 62%;
+}
+.s5 {
+  top: 80%;
+}
+
+.street.vertical {
+  top: 8%;
+  bottom: 8%;
+  width: 1.6rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(203, 213, 225, 0.35);
+  left: 4%;
+}
+
+.zone-pill {
+  position: absolute;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.z8 {
+  top: 14%;
+  left: 22%;
+}
+.z9 {
+  top: 14%;
+  left: 62%;
+}
+
+.lot {
+  position: absolute;
+  width: 3.2rem;
+  height: 2.4rem;
+  border-radius: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  transform: translate(-50%, -50%);
+  text-decoration: none;
+  z-index: 3;
+}
+
+.lot.residencial {
+  background: #f5efe3;
+}
+.lot.comercial {
+  background: #fef3c7;
+  border-color: #f59e0b;
+}
+.lot.verde {
+  background: #dcfce7;
+}
+
+.lot.selected {
+  background: #fef08a;
+  border: 2px solid #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  z-index: 5;
+}
+
+.lot:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.pin {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: -0.55rem 0 0 -0.55rem;
+  border-radius: 999px;
+  background: #7c3aed;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.45);
+}
+
+.legend {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  background: #fff;
+  border: 1px solid #e8e2f0;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.7rem;
+  color: #475569;
+  z-index: 6;
+  box-shadow: var(--nexus-card-shadow);
+}
+
+.legend strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.swatch.residencial {
+  background: #f5efe3;
+}
+.swatch.comercial {
+  background: #fef3c7;
+}
+.swatch.verde {
+  background: #dcfce7;
+}
+.swatch.selected-sw {
+  background: #7c3aed;
+  border-radius: 999px;
+}
+
+.compass {
+  position: absolute;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e8e2f0;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #334155;
+  z-index: 6;
+}
+
+.map-selection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.65rem;
+  background: #f8f5fc;
+  border: 1px solid #e8e2f0;
+}
+
+.map-selection .sel-label {
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.map-selection .mono {
+  display: block;
+  margin-top: 0.15rem;
+  color: #4c1d95;
+}
+
+.map-selection .sel-owner {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.85rem;
+  color: #475569;
+}

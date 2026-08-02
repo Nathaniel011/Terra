@@ -1,0 +1,38 @@
+<div class="dash anim-stagger">
+  <header class="dash-hd">
+    <div>
+      <h1 class="page-title">Sistema Catastral Urbano</h1>
+      <p class="page-sub">Panel de trabajo del área de catastro</p>
+    </div>
+  </header>
+
+  <div class="kpi-row">
+    <div class="kpi card">
+      <span>Unidades</span>
+      <strong>{{ predios.all().length }}</strong>
+    </div>
+    <div class="kpi card">
+      <span>Trámites activos</span>
+      <strong>{{ tramites.pendientes().length }}</strong>
+    </div>
+    <div class="kpi card">
+      <span>Observados</span>
+      <strong>{{ tramites.observados().length }}</strong>
+    </div>
+    <div class="kpi card">
+      <span>Inspecciones mes</span>
+      <strong>{{ inspecciones.delMes().length }}</strong>
+    </div>
+  </div>
+
+  <h2 class="section-title">Módulos</h2>
+  <div class="mod-grid">
+    @for (m of modulos; track m.path) {
+      <a class="mod-card card" [routerLink]="m.path">
+        <span class="mod-icon"><i class="pi" [class]="m.icon"></i></span>
+        <strong>{{ m.title }}</strong>
+        <span>{{ m.desc }}</span>
+      </a>
+    }
+  </div>
+</div>

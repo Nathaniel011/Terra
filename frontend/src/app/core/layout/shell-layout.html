@@ -1,0 +1,78 @@
+<div class="app-shell" [class.menu-open]="menuOpen()">
+  <div
+    class="sidebar-backdrop"
+    [class.visible]="menuOpen()"
+    (click)="closeMenu()"
+    aria-hidden="true"
+  ></div>
+
+  <aside id="app-sidebar" class="sidebar" aria-label="Navegación principal">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <i class="pi pi-map"></i>
+      </div>
+      <strong class="brand-name">TERRA</strong>
+    </div>
+
+    <nav class="nav">
+      @for (group of navGroups; track $index; let gi = $index) {
+        @if (gi > 0) {
+          <hr class="nav-sep" aria-hidden="true" />
+        }
+        @if (group.label) {
+          <p class="nav-group-label" [attr.title]="group.label">{{ group.label }}</p>
+        }
+        @for (item of group.items; track item.path; let i = $index) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.path.endsWith('inicio') }"
+            [attr.title]="item.label"
+            [style.animation-delay.ms]="80 + (gi * 4 + i) * 35"
+            class="nav-item"
+            (click)="closeMenu()"
+          >
+            <i class="pi nav-icon" [class]="item.icon" aria-hidden="true"></i>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        }
+      }
+    </nav>
+
+    <button type="button" class="back-link" title="Atrás" (click)="goBack()">
+      <i class="pi pi-arrow-left nav-icon" aria-hidden="true"></i>
+      <span class="nav-label">Atrás</span>
+    </button>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button
+          type="button"
+          class="menu-toggle"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuOpen()"
+          aria-controls="app-sidebar"
+          aria-label="Abrir menú"
+        >
+          <i class="pi" [class.pi-times]="menuOpen()" [class.pi-bars]="!menuOpen()"></i>
+        </button>
+        <p class="crumb">{{ crumbPrefix() }} / <span class="crumb-active">{{ crumb() }}</span></p>
+      </div>
+      <div class="user-block">
+        <span class="user-name">{{ auth.displayName() }}</span>
+        <p-button
+          label="Salir"
+          severity="secondary"
+          [text]="true"
+          size="small"
+          (onClick)="logout()"
+        />
+      </div>
+    </header>
+    <main class="content" [class.page-enter]="pageAnim()">
+      <router-outlet />
+    </main>
+  </div>
+</div>

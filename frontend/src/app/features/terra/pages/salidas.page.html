@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-hd">
+    <div class="title-row">
+      <span class="hd-icon"><i class="pi pi-file"></i></span>
+      <div>
+        <h2>Salidas y consultas</h2>
+        <p class="hd-sub">Certificado, ficha catastral y formulario de encuesta</p>
+      </div>
+    </div>
+  </div>
+  <div class="card-bd">
+    <div class="field" style="max-width: 22rem; margin-bottom: 1.25rem">
+      <label>Unidad catastral</label>
+      <select [ngModel]="codigo()" (ngModelChange)="codigo.set($event)">
+        @for (p of predios.all(); track p.codigoCatastral) {
+          <option [value]="p.codigoCatastral">{{ p.codigoCatastral }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="mod-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem">
+      <button type="button" class="btn btn-primary" (click)="generar('Certificado catastral')">
+        <i class="pi pi-verified"></i> Generar certificado catastral
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="generar('Ficha catastral')">
+        <i class="pi pi-id-card"></i> Generar ficha catastral
+      </button>
+      <button type="button" class="btn btn-outline" (click)="generar('Formulario de encuesta')">
+        <i class="pi pi-list"></i> Formulario de encuesta
+      </button>
+      <button type="button" class="btn btn-outline" (click)="generar('MXD centrado')">
+        <i class="pi pi-map"></i> MXD centrado (placeholder)
+      </button>
+    </div>
+
+    @if (mensaje()) {
+      <p class="alert alert-info" style="margin-top: 1.25rem">{{ mensaje() }}</p>
+    }
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="insp-grid">
+  <div class="card cal-card">
+    <div class="card-hd">
+      <div class="title-row">
+        <span class="hd-icon"><i class="pi pi-calendar"></i></span>
+        <h2>{{ mesLabel() }}</h2>
+      </div>
+    </div>
+    <div class="card-bd">
+      <div class="cal-head">
+        @for (d of ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do']; track d) {
+          <span>{{ d }}</span>
+        }
+      </div>
+      <div class="cal-grid">
+        @for (day of calendarDays(); track $index) {
+          <button
+            type="button"
+            class="cal-day"
+            [class.empty]="day === null"
+            [class.selected]="day === selectedDay()"
+            [disabled]="day === null"
+            (click)="day !== null && selectedDay.set(day)"
+          >
+            @if (day !== null) {
+              <span>{{ day }}</span>
+              @if (dayStatus(day); as st) {
+                <i
+                  class="dot"
+                  [class.prog]="st === 'PROGRAMADA' || st === 'MIXTO'"
+                  [class.done]="st === 'COMPLETADA' || st === 'MIXTO'"
+                ></i>
+              }
+            }
+          </button>
+        }
+      </div>
+      <div class="cal-legend">
+        <span><i class="dot prog"></i> Programada</span>
+        <span><i class="dot done"></i> Completada</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card crono-card">
+    <div class="card-hd">
+      <div class="title-row">
+        <span class="hd-icon"><i class="pi pi-clipboard"></i></span>
+        <h2>Cronograma — día {{ selectedDay() }} · {{ mesLabel() }}</h2>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="programar()">
+        <i class="pi pi-plus"></i> Programar
+      </button>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Predio</th>
+            <th>Propietario</th>
+            <th>Inspector</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (i of delDia(); track i.id) {
+            <tr>
+              <td>{{ formatFecha(i.fecha) }}</td>
+              <td>{{ i.hora }}</td>
+              <td>
+                <a class="link-owner mono" [routerLink]="['/app/unidades', i.codigoCatastral]">
+                  {{ i.codigoCatastral }}
+                </a>
+              </td>
+              <td>{{ i.propietario }}</td>
+              <td>{{ i.inspector }}</td>
+              <td>{{ i.tipo }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-warn]="i.estado === 'PROGRAMADA'"
+                  [class.badge-ok]="i.estado === 'COMPLETADA'"
+                >
+                  {{ i.estado }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-msg">Sin inspecciones para el día {{ selectedDay() }}.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

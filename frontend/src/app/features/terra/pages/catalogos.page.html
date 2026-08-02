@@ -1,0 +1,121 @@
+<div class="card">
+  <div class="card-hd">
+    <div class="title-row">
+      <span class="hd-icon"><i class="pi pi-table"></i></span>
+      <div>
+        <h2>Catálogos</h2>
+        <p class="hd-sub">Zonas, suelos, depreciación, pendiente y tipologías de construcción</p>
+      </div>
+    </div>
+  </div>
+  <div class="card-bd">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem">
+      <button type="button" class="btn" [class.btn-primary]="tab() === 'zonas'" [class.btn-outline]="tab() !== 'zonas'" (click)="tab.set('zonas')">
+        Zonas / Suelos
+      </button>
+      <button type="button" class="btn" [class.btn-primary]="tab() === 'depreciacion'" [class.btn-outline]="tab() !== 'depreciacion'" (click)="tab.set('depreciacion')">
+        Depreciación
+      </button>
+      <button type="button" class="btn" [class.btn-primary]="tab() === 'pendiente'" [class.btn-outline]="tab() !== 'pendiente'" (click)="tab.set('pendiente')">
+        Pendiente
+      </button>
+      <button type="button" class="btn" [class.btn-primary]="tab() === 'tipologias'" [class.btn-outline]="tab() !== 'tipologias'" (click)="tab.set('tipologias')">
+        Tipologías
+      </button>
+    </div>
+
+    @if (tab() === 'zonas') {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código zona</th>
+              <th>Código suelo</th>
+              <th>Nombre suelo</th>
+              <th>Valor suelo</th>
+              <th>Valor excedente</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (z of data.zonasSuelos(); track z.codigoZona + z.codigoSuelo) {
+              <tr>
+                <td class="mono">{{ z.codigoZona }}</td>
+                <td class="mono">{{ z.codigoSuelo }}</td>
+                <td>{{ z.nombreSuelo }}</td>
+                <td>{{ z.valorSuelo }}</td>
+                <td>{{ z.valorExcedente }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (tab() === 'depreciacion') {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Cantidad años</th>
+              <th>Factor</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of data.factoresDepreciacion(); track f.cantidadAnos) {
+              <tr>
+                <td>{{ f.cantidadAnos }}</td>
+                <td>{{ f.valor }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (tab() === 'pendiente') {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Grado inclinación</th>
+              <th>Factor</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of data.factoresPendiente(); track f.gradoInclinacion) {
+              <tr>
+                <td>{{ f.gradoInclinacion }}</td>
+                <td>{{ f.valorFactor }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (tab() === 'tipologias') {
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Valor unifamiliar</th>
+              <th>Valor P.H.</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of data.tipologias(); track t.codigo) {
+              <tr>
+                <td class="mono">{{ t.codigo }}</td>
+                <td>{{ t.nombre }}</td>
+                <td>{{ t.valorUnifamiliar }}</td>
+                <td>{{ t.valorPropiedadHorizontal }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-hd">
+    <div class="title-row">
+      <span class="hd-icon"><i class="pi pi-sitemap"></i></span>
+      <div>
+        <h2>Trámites catastrales</h2>
+        <p class="hd-sub">Bandeja de trámites, tareas y estados</p>
+      </div>
+    </div>
+  </div>
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>N° trámite</th>
+          <th>Tipo</th>
+          <th>Código catastral</th>
+          <th>Solicitante</th>
+          <th>Tarea actual</th>
+          <th>Funcionario</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of data.all(); track t.id) {
+          <tr>
+            <td class="mono">{{ t.numero }}</td>
+            <td>{{ t.tipo }}</td>
+            <td>
+              @if (t.codigoCatastral !== 'SIN-ASIGNAR') {
+                <a class="link-owner mono" [routerLink]="['/app/unidades', t.codigoCatastral]">
+                  {{ t.codigoCatastral }}
+                </a>
+              } @else {
+                <span class="mono">{{ t.codigoCatastral }}</span>
+              }
+            </td>
+            <td>{{ t.solicitante }}</td>
+            <td>{{ t.tareaActual }}</td>
+            <td>{{ t.funcionario }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.badge-info]="t.estado === 'EN_PROCESO'"
+                [class.badge-warn]="t.estado === 'PENDIENTE' || t.estado === 'OBSERVADO'"
+                [class.badge-ok]="t.estado === 'FINALIZADO'"
+              >
+                {{ t.estado }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="table-foot">
+    {{ data.pendientes().length }} activos · {{ data.observados().length }} observados · mock de
+    bandeja de trámites
+  </p>
+</div>

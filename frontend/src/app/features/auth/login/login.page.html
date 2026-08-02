@@ -1,0 +1,33 @@
+<div class="login-shell">
+  <div class="waves" aria-hidden="true"></div>
+
+  <div class="login-card">
+    <header class="card-brand">
+      <div class="flex justify-center">
+        <img src="escudo.png" alt="Escudo" width="100" />
+      </div>
+      <h1>TERRA</h1>
+      <p>Sistema Catastral Urbano</p>
+      <hr />
+    </header>
+
+    <div class="card-form">
+      <h2>Acceso institucional</h2>
+      <p class="hint">Ingrese con su cuenta autorizada.</p>
+
+      @if (error()) {
+        <p class="err">{{ error() }}</p>
+      }
+
+      <button class="submit" type="button" [disabled]="submitting()" (click)="ingresar()">
+        <i class="pi pi-sign-in" aria-hidden="true"></i>
+        {{ submitting() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+
+      <p class="access-note">
+        <i class="pi pi-shield" aria-hidden="true"></i>
+        Acceso exclusivo para personal de catastro autorizado
+      </p>
+    </div>
+  </div>
+</div>

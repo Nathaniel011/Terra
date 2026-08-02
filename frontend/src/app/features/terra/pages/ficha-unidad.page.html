@@ -1,0 +1,398 @@
+@if (predio(); as p) {
+  <div class="ficha">
+    <a class="back" routerLink="/app/unidades"
+      ><i class="pi pi-arrow-left"></i> Volver al listado</a
+    >
+
+    <header class="ficha-hd">
+      <div>
+        <p class="eyebrow">Unidad catastral</p>
+        <h1 class="mono">{{ p.codigoCatastral }}</h1>
+        <p class="owner">{{ p.propietario }}</p>
+        <p class="modo-consulta">
+          <i class="pi pi-eye" aria-hidden="true"></i>
+          Modo consulta — datos oficiales de lectura; solo contribuyente editable en esta pantalla.
+        </p>
+      </div>
+      <div class="estado">
+        <span>Estado</span>
+        <span class="badge badge-ok">{{ p.estado }}</span>
+      </div>
+    </header>
+
+    <div class="valores">
+      <div>
+        <span>Valor terreno</span>
+        <strong>{{ money(p.valorTerreno) }}</strong>
+      </div>
+      <div>
+        <span>Valor construcción</span>
+        <strong>{{ money(p.valorConstruccion) }}</strong>
+      </div>
+      <div>
+        <span>Valor catastral</span>
+        <strong>{{ money(p.valorCatastral) }}</strong>
+      </div>
+    </div>
+
+    <nav class="tabs" aria-label="Registro catastral">
+      <button type="button" [class.active]="tab() === 'generales'" (click)="setTab('generales')">
+        Datos generales
+      </button>
+      <button
+        type="button"
+        [class.active]="tab() === 'superficies'"
+        (click)="setTab('superficies')"
+      >
+        Superficies
+      </button>
+      <button
+        type="button"
+        [class.active]="tab() === 'construcciones'"
+        (click)="setTab('construcciones')"
+      >
+        Construcciones
+      </button>
+      <button
+        type="button"
+        [class.active]="tab() === 'valoraciones'"
+        (click)="setTab('valoraciones')"
+      >
+        Valoraciones
+      </button>
+      <button
+        type="button"
+        [class.active]="tab() === 'propietarios'"
+        (click)="setTab('propietarios')"
+      >
+        Propietarios
+      </button>
+      <button
+        type="button"
+        [class.active]="tab() === 'transferencias'"
+        (click)="setTab('transferencias')"
+      >
+        DDRR / Transferencias
+      </button>
+      <button type="button" [class.active]="tab() === 'usos'" (click)="setTab('usos')">
+        Usos y servicios
+      </button>
+      <button type="button" [class.active]="tab() === 'otros'" (click)="setTab('otros')">
+        Otros / Cite
+      </button>
+    </nav>
+
+    <div class="ficha-body card">
+      @if (tab() === 'generales') {
+        <p class="hint-line">Identidad y ubicación del predio</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Código catastral</label>
+            <input [value]="p.codigoCatastral" readonly />
+          </div>
+          <div class="field">
+            <label>Zona / Manzano / Lote / Sub-lote</label>
+            <input
+              [value]="p.zona + ' / ' + p.manzano + ' / ' + p.lote + ' / ' + p.subLote"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Calle</label>
+            <input [value]="p.calle" readonly />
+          </div>
+          <div class="field">
+            <label>Zona municipal</label>
+            <input [value]="p.zonaMunicipal" readonly />
+          </div>
+          <div class="field">
+            <label>Titular catastral</label>
+            <input [value]="p.propietario" readonly />
+          </div>
+          <div class="field">
+            <label>CI / código propietario</label>
+            <input [value]="p.codigoPropietario" readonly />
+          </div>
+        </div>
+      }
+
+      @if (tab() === 'superficies') {
+        <p class="hint-line">Superficies de terreno, común y construcción</p>
+        <div class="grid-3">
+          <div class="field">
+            <label>Superficie terreno (m²)</label>
+            <input [value]="p.superficieTerreno" readonly />
+          </div>
+          <div class="field">
+            <label>Superficie común (m²)</label>
+            <input [value]="p.superficieComun" readonly />
+          </div>
+          <div class="field">
+            <label>Superficie construcción (m²)</label>
+            <input [value]="p.superficieConstruccion" readonly />
+          </div>
+          <div class="field">
+            <label>Frente de lote (m)</label>
+            <input [value]="p.frentes.frenteLote" readonly />
+          </div>
+          <div class="field">
+            <label>Excedente (m²)</label>
+            <input [value]="p.frentes.excedente" readonly />
+          </div>
+        </div>
+      }
+
+      @if (tab() === 'construcciones') {
+        <p class="hint-line">Plantas, tipologías y valores unitarios de construcción</p>
+        @if (p.plantas.length === 0) {
+          <p class="empty">Sin construcciones registradas.</p>
+        } @else {
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>N° constr.</th>
+                  <th>Planta</th>
+                  <th>Tipología</th>
+                  <th>Superficie</th>
+                  <th>Antigüedad</th>
+                  <th>P.H.</th>
+                  <th>Valor unit.</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (pl of p.plantas; track pl.numeroConstruccion + '-' + pl.numeroPlanta) {
+                  <tr>
+                    <td>{{ pl.numeroConstruccion }}</td>
+                    <td>{{ pl.nombrePlanta }}</td>
+                    <td>{{ pl.tipologia }}</td>
+                    <td>{{ pl.superficiePlanta }} m²</td>
+                    <td>{{ pl.antiguedad }} años</td>
+                    <td>{{ pl.propiedadHorizontal ? 'Sí' : 'No' }}</td>
+                    <td>{{ pl.valorUnitario }} Bs/m²</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+
+      @if (tab() === 'valoraciones') {
+        <p class="hint-line">Valores oficiales y parámetros del avalúo</p>
+        @if (ultimaValuacion(); as uv) {
+          <div class="alert alert-info" style="margin-bottom: 1rem">
+            Último cálculo gestión <strong>{{ uv.anioGestion }}</strong>: Vt
+            {{ money(uv.vt) }} · Vc {{ money(uv.vc) }} · Vi <strong>{{ money(uv.vi) }}</strong>
+            —
+            <a class="link-owner" routerLink="/app/valoracion">Abrir módulo de valoración</a>
+          </div>
+        } @else {
+          <p class="hint-line">
+            Aún no hay valuación calculada para esta unidad —
+            <a class="link-owner" routerLink="/app/valoracion">ir a Valoración</a>
+          </p>
+        }
+        <div class="grid-2">
+          <div class="field">
+            <label>Código zona / suelo</label>
+            <input
+              [value]="(zonaSuelo()?.codigoZona ?? p.zona) + ' / ' + (zonaSuelo()?.codigoSuelo ?? p.tipoSuelo)"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Nombre suelo (catálogo)</label>
+            <input [value]="zonaSuelo()?.nombreSuelo ?? p.tipoSuelo" readonly />
+          </div>
+          <div class="field">
+            <label>Valor suelo (Bs/m²)</label>
+            <input [value]="zonaSuelo()?.valorSuelo ?? '—'" readonly />
+          </div>
+          <div class="field">
+            <label>Valor excedente (Bs/m²)</label>
+            <input [value]="zonaSuelo()?.valorExcedente ?? '—'" readonly />
+          </div>
+          <div class="field">
+            <label>Zona radio</label>
+            <input [value]="p.zonaRadio" readonly />
+          </div>
+          <div class="field">
+            <label>Pendiente</label>
+            <input
+              [value]="
+                p.pendiente === '0-10'
+                  ? 'De 0° a 10°'
+                  : p.pendiente === '10-20'
+                    ? 'De 10° a 20°'
+                    : 'Más de 20°'
+              "
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Valor terreno registrado (Vt)</label>
+            <input [value]="money(p.valorTerreno)" readonly />
+          </div>
+          <div class="field">
+            <label>Valor construcción registrado (Vc)</label>
+            <input [value]="money(p.valorConstruccion)" readonly />
+          </div>
+          <div class="field">
+            <label>Valor catastral registrado (Vi)</label>
+            <input [value]="money(p.valorCatastral)" readonly />
+          </div>
+        </div>
+      }
+
+      @if (tab() === 'propietarios' && draft(); as d) {
+        <p class="hint-line">Datos del contribuyente y titular</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Nombre / Razón social</label>
+            <input [(ngModel)]="d.nombre" name="nombre" />
+          </div>
+          <div class="field">
+            <label>Nº documento (C.I.)</label>
+            <input [(ngModel)]="d.documento" name="documento" />
+          </div>
+          <div class="field">
+            <label>Complemento</label>
+            <input [(ngModel)]="d.complemento" name="complemento" />
+          </div>
+          <div class="field">
+            <label>Fecha nacimiento</label>
+            <input [(ngModel)]="d.fechaNacimiento" name="fnac" />
+          </div>
+          <div class="field">
+            <label>Teléfono</label>
+            <input [(ngModel)]="d.telefono" name="tel" />
+          </div>
+          <div class="field">
+            <label>Celular</label>
+            <input [(ngModel)]="d.celular" name="cel" />
+          </div>
+          <div class="field">
+            <label>Correo</label>
+            <input [(ngModel)]="d.correo" name="correo" />
+          </div>
+          <div class="field">
+            <label>Código propietario</label>
+            <input [(ngModel)]="d.codigoPropietario" name="cod" />
+          </div>
+          <div class="field">
+            <label>Departamento / Provincia</label>
+            <input [value]="d.departamento + ' / ' + d.provincia" readonly />
+          </div>
+          <div class="field">
+            <label>Alcaldía / Zona barrio</label>
+            <input [value]="d.alcaldia + ' / ' + d.zonaBarrio" readonly />
+          </div>
+          <div class="field" style="grid-column: 1 / -1">
+            <label>Dirección de notificación</label>
+            <input [(ngModel)]="d.direccionNotificacion" name="dir" />
+          </div>
+        </div>
+        <div class="actions">
+          @if (saved()) {
+            <span class="ok-msg">Cambios guardados en memoria (mock).</span>
+          }
+          <button type="button" class="btn btn-primary" (click)="saveContrib(p.codigoCatastral)">
+            Guardar cambios
+          </button>
+        </div>
+      }
+
+      @if (tab() === 'transferencias') {
+        <p class="hint-line">Transferencias, testimonio, partida, folio y boleta de impuestos</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Vendedor</label>
+            <input [value]="p.transferencia.vendedor" readonly />
+          </div>
+          <div class="field">
+            <label>Comprador</label>
+            <input [value]="p.transferencia.comprador" readonly />
+          </div>
+          <div class="field">
+            <label>Testimonio vendedor</label>
+            <input [value]="p.transferencia.testimonioVendedor" readonly />
+          </div>
+          <div class="field">
+            <label>Testimonio comprador</label>
+            <input [value]="p.transferencia.testimonioComprador" readonly />
+          </div>
+          <div class="field">
+            <label>Partida / Folio vendedor</label>
+            <input
+              [value]="p.transferencia.partidaVendedor + ' / ' + p.transferencia.folioVendedor"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>Partida / Folio comprador</label>
+            <input
+              [value]="p.transferencia.partidaComprador + ' / ' + p.transferencia.folioComprador"
+              readonly
+            />
+          </div>
+          <div class="field">
+            <label>N° boleta impuestos</label>
+            <input [value]="p.transferencia.nroBoletaImpuestos" readonly />
+          </div>
+          <div class="field">
+            <label>Fecha boleta</label>
+            <input [value]="p.transferencia.fechaBoletaImpuestos" readonly />
+          </div>
+        </div>
+      }
+
+      @if (tab() === 'usos') {
+        <p class="hint-line">Uso del predio y servicios básicos</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Uso primario</label>
+            <input [value]="usoLabel(p)" readonly />
+          </div>
+          <div class="field">
+            <label>Uso destinado</label>
+            <input [value]="p.usoDestinado ?? usoLabel(p)" readonly />
+          </div>
+        </div>
+        <div class="chip-row">
+          <span>Servicios</span>
+          <span class="chip" [class.on]="p.servicios.luz">Luz</span>
+          <span class="chip" [class.on]="p.servicios.agua">Agua</span>
+          <span class="chip" [class.on]="p.servicios.alcantarillado">Alcantarillado</span>
+          <span class="chip" [class.on]="p.servicios.telefono">Teléfono</span>
+          <span class="chip" [class.on]="p.servicios.gas">Gas</span>
+        </div>
+      }
+
+      @if (tab() === 'otros') {
+        <p class="hint-line">Cite, observaciones y datos complementarios</p>
+        <div class="grid-2">
+          <div class="field">
+            <label>Cite (enlace documental futuro)</label>
+            <input [value]="p.frentes.cite || '—'" readonly />
+          </div>
+          <div class="field">
+            <label>Comentario</label>
+            <input [value]="p.frentes.comentario || '—'" readonly />
+          </div>
+          <div class="field" style="grid-column: 1 / -1">
+            <label>Observaciones</label>
+            <textarea rows="3" [value]="p.frentes.observaciones || ''" readonly></textarea>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="card card-bd">
+    <p>
+      No se encontró la unidad <strong class="mono">{{ codigo() }}</strong>.
+    </p>
+    <a routerLink="/app/unidades" class="btn btn-secondary">Volver al listado</a>
+  </div>
+}

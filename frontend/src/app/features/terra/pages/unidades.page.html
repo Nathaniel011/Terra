@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="card-hd">
+    <div class="title-row">
+      <span class="hd-icon"><i class="pi pi-building"></i></span>
+      <div>
+        <h2>Unidades catastrales</h2>
+        <p class="hd-sub">Listado por código catastral, titular y ubicación</p>
+      </div>
+    </div>
+    <label class="search-wrap">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        type="search"
+        placeholder="Buscar código, propietario o calle..."
+        [ngModel]="search"
+        (ngModelChange)="onSearch($event)"
+      />
+    </label>
+  </div>
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Código catastral</th>
+          <th>Zona / Manzano / Lote</th>
+          <th>Titular</th>
+          <th>Calle</th>
+          <th>Zona mun.</th>
+          <th>Sup. terreno</th>
+          <th>Valor catastral</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of data.filtered(); track p.codigoCatastral) {
+          <tr>
+            <td>
+              <a class="link-owner mono" [routerLink]="['/app/unidades', p.codigoCatastral]">
+                {{ p.codigoCatastral }}
+              </a>
+            </td>
+            <td>{{ p.zona }} / {{ p.manzano }} / {{ p.lote }}</td>
+            <td>{{ p.propietario }}</td>
+            <td>{{ p.calle }}</td>
+            <td>{{ p.zonaMunicipal }}</td>
+            <td>{{ p.superficieTerreno }} m²</td>
+            <td>{{ data.formatMoney(p.valorCatastral) }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.badge-ok]="p.estado === 'ACTIVO'"
+                [class.badge-warn]="p.estado === 'OBSERVADO'"
+                [class.badge-danger]="p.estado === 'INACTIVO'"
+              >
+                {{ p.estado }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="table-foot">
+    Mostrando {{ data.filtered().length }} de {{ data.all().length }} unidades — abrir ficha para
+    datos generales, construcciones, valoraciones, DDRR y usos
+  </p>
+</div>

@@ -1,0 +1,31 @@
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.hd-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  display: grid;
+  place-items: center;
+  background: #ede9fe;
+  color: #7c3aed;
+  flex-shrink: 0;
+}
+
+.hd-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.table-foot {
+  margin: 0;
+  padding: 0.75rem 1.1rem;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  border-top: 1px solid #f0ebf5;
+}

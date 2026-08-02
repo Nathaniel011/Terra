@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-hd">
+    <div class="title-row">
+      <span class="hd-icon"><i class="pi pi-inbox"></i></span>
+      <div>
+        <h2>Recepción y pre-registro</h2>
+        <p class="hd-sub">Pre-registros recibidos y creación de trámite</p>
+      </div>
+    </div>
+  </div>
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Solicitante</th>
+          <th>Documento</th>
+          <th>Tipo trámite</th>
+          <th>Código catastral</th>
+          <th>Fecha</th>
+          <th>Sincronizado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of data.preregistrosAll(); track p.id) {
+          <tr>
+            <td>{{ p.solicitante }}</td>
+            <td class="mono">{{ p.documento }}</td>
+            <td>{{ p.tipoTramite }}</td>
+            <td class="mono">{{ p.codigoCatastral ?? '—' }}</td>
+            <td>{{ p.fecha }}</td>
+            <td>
+              <span class="badge" [class.badge-ok]="p.sincronizado" [class.badge-warn]="!p.sincronizado">
+                {{ p.sincronizado ? 'Sí' : 'Pendiente' }}
+              </span>
+            </td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="p.sincronizado"
+                (click)="crear(p.id)"
+              >
+                {{ p.sincronizado ? 'Ya creado' : 'Crear trámite' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="table-foot">Al crear el trámite, pasa a la bandeja de Trámites.</p>
+</div>

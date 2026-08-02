@@ -1,0 +1,354 @@
+<div class="val-page">
+  <header class="val-hd">
+    <div>
+      <h1 class="page-title">Módulo de Valoración</h1>
+      <p class="page-sub">
+        Vt = (área básica × valor suelo + excedente × valor excedente) × factores · Vc = Σ(Ac ×
+        Crmc × Fi) · Vi = Vt + Vc
+      </p>
+    </div>
+    <div class="field anio-field">
+      <label>Año de gestión</label>
+      <select [ngModel]="anioGestion()" (ngModelChange)="anioGestion.set(+$event)">
+        @for (y of valuacion.aniosDisponibles(); track y) {
+          <option [value]="y">{{ y }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <nav class="modo-tabs">
+    <button type="button" [class.active]="modo() === 'individual'" (click)="setModo('individual')">
+      Individual
+    </button>
+    <button type="button" [class.active]="modo() === 'masivo'" (click)="setModo('masivo')">
+      Masivo
+    </button>
+    <button type="button" [class.active]="modo() === 'consulta'" (click)="setModo('consulta')">
+      Consulta
+    </button>
+    <button
+      type="button"
+      [class.active]="modo() === 'secundarias'"
+      (click)="setModo('secundarias')"
+    >
+      Secundarias
+    </button>
+  </nav>
+
+  @if (mensaje()) {
+    <p class="alert alert-info">{{ mensaje() }}</p>
+  }
+
+  @if (modo() === 'individual') {
+    <div class="card">
+      <div class="card-hd">
+        <h2>Cálculo individual</h2>
+        <div class="hd-actions">
+          <div class="field" style="margin: 0; min-width: 16rem">
+            <label>Código catastral</label>
+            <select [ngModel]="codigo()" (ngModelChange)="codigo.set($event)">
+              @for (p of predios.all(); track p.codigoCatastral) {
+                <option [value]="p.codigoCatastral">
+                  {{ p.codigoCatastral }} — {{ p.propietario }}
+                </option>
+              }
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="calcularIndividual()">
+            <i class="pi pi-calculator"></i> Calcular
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="aplicarIndividual()">
+            Aplicar a ficha
+          </button>
+        </div>
+      </div>
+
+      @if (ultimo(); as u) {
+        <div class="card-bd">
+          <div class="resumen-vi">
+            <div class="kpi">
+              <span>Vt · Terreno</span>
+              <strong>{{ money(u.vt) }}</strong>
+              <code>(Área_básica×ValorSuelo + Exc.×ValorExc.)×∏Fi</code>
+            </div>
+            <div class="kpi">
+              <span>Vc · Construcciones</span>
+              <strong>{{ money(u.vc) }}</strong>
+              <code>Σ(Ac×Crmc×Fi)</code>
+            </div>
+            <div class="kpi total">
+              <span>Vi · Inmueble</span>
+              <strong>{{ money(u.vi) }}</strong>
+              <code>Vt + Vc</code>
+            </div>
+          </div>
+
+          <h3 class="block-title">Detalle de terreno</h3>
+          <div class="grid-3">
+            <div class="field">
+              <label>Área total (At)</label>
+              <input [value]="u.detalleTerreno.areaTotal + ' m²'" readonly />
+            </div>
+            <div class="field">
+              <label>Área básica</label>
+              <input [value]="u.detalleTerreno.areaBasica + ' m²'" readonly />
+            </div>
+            <div class="field">
+              <label>Excedente</label>
+              <input [value]="u.detalleTerreno.excedente + ' m²'" readonly />
+            </div>
+            <div class="field">
+              <label>ValorSuelo (Bs/m²)</label>
+              <input [value]="u.detalleTerreno.valorSuelo" readonly />
+            </div>
+            <div class="field">
+              <label>ValorExcedente (Bs/m²)</label>
+              <input [value]="u.detalleTerreno.valorExcedente" readonly />
+            </div>
+            <div class="field">
+              <label>Vt bruto (antes de Fi)</label>
+              <input [value]="money(u.detalleTerreno.vtBruto)" readonly />
+            </div>
+          </div>
+          <div class="factores">
+            @for (f of u.detalleTerreno.factores; track f.nombre) {
+              <span class="chip on">{{ f.nombre }}: ×{{ f.valor }}</span>
+            }
+          </div>
+          <p class="formula-line">
+            Vt = ({{ u.detalleTerreno.areaBasica }} × {{ u.detalleTerreno.valorSuelo }} +
+            {{ u.detalleTerreno.excedente }} × {{ u.detalleTerreno.valorExcedente }}) ×
+            {{ factoresProducto(u) }} =
+            <strong>{{ money(u.vt) }}</strong>
+          </p>
+
+          <h3 class="block-title">Detalle de construcciones</h3>
+          @if (u.detalleConstrucciones.length === 0) {
+            <p class="empty">Sin construcciones — Vc = 0</p>
+          } @else {
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Constr.</th>
+                    <th>Planta</th>
+                    <th>Ac (m²)</th>
+                    <th>Crmc</th>
+                    <th>Antigüedad</th>
+                    <th>Fi dep.</th>
+                    <th>Vc_i</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (c of u.detalleConstrucciones; track c.numeroConstruccion + '-' + c.numeroPlanta) {
+                    <tr>
+                      <td>{{ c.numeroConstruccion }}</td>
+                      <td>{{ c.nombrePlanta }}</td>
+                      <td>{{ c.ac }}</td>
+                      <td>{{ c.crmc }}</td>
+                      <td>{{ c.antiguedad }} años</td>
+                      <td>×{{ c.fi }}</td>
+                      <td>{{ money(c.vc) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+          <p class="hint-link">
+            <a class="link-owner" [routerLink]="['/app/unidades', u.codigoCatastral]"
+              >Abrir ficha de la unidad</a
+            >
+          </p>
+        </div>
+      } @else {
+        <div class="card-bd">
+          <p class="empty">Seleccione unidad y pulse <strong>Calcular</strong>.</p>
+        </div>
+      }
+    </div>
+  }
+
+  @if (modo() === 'masivo') {
+    <div class="card">
+      <div class="card-hd">
+        <h2>Cálculo masivo</h2>
+        <div class="hd-actions">
+          <button type="button" class="btn btn-primary" (click)="calcularMasivo()">
+            <i class="pi pi-sync"></i> Calcular todas
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="aplicarMasivo()">
+            Aplicar a todas las fichas
+          </button>
+        </div>
+      </div>
+      <div class="card-bd">
+        <p class="page-sub" style="margin-bottom: 1rem">
+          Recalcula Vt, Vc y Vi de <strong>todas</strong> las unidades para el año de gestión
+          {{ anioGestion() }}.
+        </p>
+        @if (resultadosMasivo().length) {
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Vt</th>
+                  <th>Vc</th>
+                  <th>Vi</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of resultadosMasivo(); track r.codigoCatastral) {
+                  <tr>
+                    <td class="mono">{{ r.codigoCatastral }}</td>
+                    <td>{{ money(r.vt) }}</td>
+                    <td>{{ money(r.vc) }}</td>
+                    <td><strong>{{ money(r.vi) }}</strong></td>
+                    <td>
+                      <button type="button" class="link-owner" (click)="toggleDetalle(r.codigoCatastral)">
+                        {{ detalleAbierto() === r.codigoCatastral ? 'Ocultar' : 'Detalle' }}
+                      </button>
+                    </td>
+                  </tr>
+                  @if (detalleAbierto() === r.codigoCatastral) {
+                    <tr class="detail-row">
+                      <td colspan="5">
+                        Terreno: At {{ r.detalleTerreno.areaTotal }} m² · excedente
+                        {{ r.detalleTerreno.excedente }} · Fi
+                        {{ factoresProducto(r) }} ·
+                        Construcciones: {{ r.detalleConstrucciones.length }} planta(s)
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (modo() === 'consulta') {
+    <div class="card">
+      <div class="card-hd">
+        <h2>Consulta de valuaciones · gestión {{ anioGestion() }}</h2>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Fecha cálculo</th>
+              <th>Vt</th>
+              <th>Vc</th>
+              <th>Vi</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of consultaLista(); track r.codigoCatastral + r.anioGestion) {
+              <tr>
+                <td>
+                  <a class="link-owner mono" [routerLink]="['/app/unidades', r.codigoCatastral]">
+                    {{ r.codigoCatastral }}
+                  </a>
+                </td>
+                <td>{{ r.fechaCalculo | date: 'short' }}</td>
+                <td>{{ money(r.vt) }}</td>
+                <td>{{ money(r.vc) }}</td>
+                <td><strong>{{ money(r.vi) }}</strong></td>
+                <td>
+                  <button
+                    type="button"
+                    class="link-owner"
+                    (click)="codigo.set(r.codigoCatastral); ultimo.set(r); setModo('individual')"
+                  >
+                    Ver detalle
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6">No hay valuaciones guardadas para este año. Ejecute cálculo individual o masivo.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (modo() === 'secundarias') {
+    <div class="card">
+      <div class="card-hd">
+        <h2>Valoraciones secundarias</h2>
+        <div class="field" style="margin: 0; min-width: 14rem">
+          <label>Unidad</label>
+          <select [ngModel]="codigo()" (ngModelChange)="codigo.set($event)">
+            @for (p of predios.all(); track p.codigoCatastral) {
+              <option [value]="p.codigoCatastral">{{ p.codigoCatastral }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="card-bd">
+        <p class="page-sub">
+          Registros complementarios. <strong>No modifican</strong> el valor catastral (Vi).
+        </p>
+        <div class="grid-3" style="margin: 1rem 0">
+          <div class="field">
+            <label>Tipo</label>
+            <input [(ngModel)]="secTipo" name="secTipo" />
+          </div>
+          <div class="field">
+            <label>Descripción</label>
+            <input [(ngModel)]="secDesc" name="secDesc" />
+          </div>
+          <div class="field">
+            <label>Monto (Bs)</label>
+            <input type="number" [(ngModel)]="secMonto" name="secMonto" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="agregarSecundaria()">Añadir valoración</button>
+
+        <div class="table-scroll" style="margin-top: 1.25rem">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Año</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of secundariasLista(); track s.id) {
+                <tr>
+                  <td>{{ s.tipo }}</td>
+                  <td>{{ s.descripcion }}</td>
+                  <td>{{ money(s.monto) }}</td>
+                  <td>{{ s.anioGestion }}</td>
+                  <td>
+                    <button type="button" class="link-owner" (click)="valuacion.eliminarSecundaria(s.id)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">Sin valoraciones secundarias para esta unidad/año.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+</div>
